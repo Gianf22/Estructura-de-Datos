@@ -1,6 +1,1 @@
 //Este es un proyecto de C++
-#include<iostream>
-using namespace std;
-int main{
-  cout<<"Hola mundo";
-}
