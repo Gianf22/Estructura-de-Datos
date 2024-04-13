@@ -105,22 +105,20 @@ void mostrar(FILE* P, Productos& producto) {
         cout << " No se puede abrir el archivo Productos \n";
         system("pause");
     } else {
-    	cout << "\n ========================================";
-    	cout << "\n          PRODUCTOS REGISTRADOS";
-    	cout << "\n ========================================\n";
-
+    	cout << "\n ==================================================================================";
+    	cout << "\n                                  PRODUCTOS REGISTRADOS";
+    	cout << "\n ==================================================================================";
+        cout << "\n    Codigo   |      Nombre      |   Cantidad de unidades   |    Precio unitario";
+        cout << "\n ==================================================================================\n";
         while (!feof(P)) {
             fread(&producto, sizeof(producto), 1, P);
             if (ferror(P)) {
                 cout << " Error de Lectura de Archivo \n";
                 system("pause");
             }
+
             if (!feof(P)) {
-                cout << "\n Codigo de producto: "; cout << producto.codProducto << "\n";
-                cout << " Nombre del producto: "; cout << producto.nomProducto << "\n";
-                cout << " Cantidad de unidades: "; cout << producto.cantidad << "\n";
-                cout << " Precio por unidad: S/. "; cout << producto.preciounitario << "\n";
-                cout << "\n ======================================== \n";
+                cout <<"      "<<producto.codProducto<<"		  "<<producto.nomProducto<<"		 "<<producto.cantidad<<"			   "<<producto.preciounitario<<endl;
             }
         }
         fclose(P);
