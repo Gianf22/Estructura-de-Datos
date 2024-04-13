@@ -16,6 +16,7 @@ void ingresar(FILE* P, Productos& producto);
 void eliminarDatoProd(V_PORDUCTOS *vp);
 void mostrar(FILE* P, Productos& producto);
 void mostrarPorCodigo(FILE* P, int codigo);
+void recuperarDatosModi(V_MODIFICADOR *vp);
 void salir();
 
 int main() {
@@ -241,5 +242,27 @@ void eliminarDatoProd(V_PRODUCTOS *vp)
     } else {
         cout<<"Registro mercancia vacio\n";
         system("pause");
+    }
+}
+
+void recuperarDatosModi(V_MODIFICADOR *vp)
+{
+    MODIFICADOR a;
+    int i,val;
+    FILE *f;
+    i=0;
+    f=fopen("datosMercancia.dat", "r");
+    if(f==NULL) {
+        cout<<"ERROR al abrir el file...\n";
+        exit(0);
+    } else {
+        fread(&a,sizeof(a),1,f);
+        while(!feof(f)) {
+            vp->x[i]=a;
+            i=i+1;
+            fread(&a,sizeof(a),1,f);
+        }
+        vx->dx=i;
+        fclose(f);
     }
 }
