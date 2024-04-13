@@ -1,5 +1,6 @@
 #include <iostream>
-
+#include <string>
+#define dimesion 50
 using namespace std;
 
 struct Productos {
@@ -8,13 +9,20 @@ struct Productos {
     int cantidad;
     int preciounitario;
 };
-
+struct MODIFICADOR{
+	int codProducto;
+	char codOperacion;
+	int numUnidades;
+};
 int menu();
+void crearInventario(PRODUCTOS p[], int *dp);
 void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta);
 void crear(FILE* P);
 void ingresar(FILE* P, Productos& producto);
 void mostrar(FILE* P, Productos& producto);
 void mostrarPorCodigo(FILE* P, int codigo);
+void recuperarDatos(FILE F, PRODUCTOS p[], int *dp); 
+void limpiarBuffer();
 void salir();
 
 int main() {
@@ -40,7 +48,9 @@ int menu() {
     cout << "\n Digite una opcion ==> "; cin >> opcion;
     return opcion;
 }
-
+void crearInventario(PRODUCTOS p[], int *dp){
+	*dp=1
+}
 void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta){
 	do {
         system("cls");
@@ -58,7 +68,34 @@ void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta
         system("cls");
     } while (respuesta == 'S' || respuesta == 's');
 }
-
+void recuperarDatos(FILE *F, PRODUCTOS p[], int *dp){
+	producto v;
+	F=fopen("d:inventario.dat","w");
+	*dp=-1
+	if(F==NULL){
+		cout<<"no se ha abierto el archivo"<endl;
+	}
+	else{
+		fread(&v,size(v),1,F);
+		while(!feof(F)){
+			if(*dp<0){
+				*dp=0
+				p[*dp]=v;
+				*dp=*dp+1
+			}
+			else{
+				if(*dp!=dimension){
+					p[*dp]=v;
+					*dp=*dp+1
+				}
+				else{
+					cout<<"fuera de rango"<<endl;
+				}
+			}
+			fread(&v,size(v),1,F);
+		}
+	}
+}
 void crear(FILE* P) {
 	system("cls");
     P = fopen("c:Productos.txt", "w");
