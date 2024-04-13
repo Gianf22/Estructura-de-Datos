@@ -1,14 +1,22 @@
 #include <iostream>
-
+#include <string>
+#define dimesion 50
 using namespace std;
 
-struct Productos {
+struct PRODUCTOS {
     int codProducto;
     char nomProducto[30];
     int cantidad;
     int preciounitario;
 };
+struct MODIFICADOR{
+	int codProducto;
+	char codOperacion;
+	int numUnidades;
+};
+void crearInventario(PRODUCTOS p[], int *dp);
 
+void recuperarDatos(FILE F, PRODUCTOS p[], int *dp);
 int menu();
 void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta);
 void crear(FILE* P);
@@ -40,7 +48,9 @@ int menu() {
     cout << "\n Digite una opcion ==> "; cin >> opcion;
     return opcion;
 }
-
+void crearInventario(PRODUCTOS p[], int *dp){
+	*dp=1
+}
 void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta){
 	do {
         system("cls");
@@ -163,7 +173,34 @@ void mostrarPorCodigo(FILE* P, int codigo) {
         fclose(P);
     }
 }
-
+void recuperarDatos(FILE *F, PRODUCTOS p[], int *dp){
+	PRODUCTOS v;
+	F=fopen("d:inventario.dat","w");
+	*dp=-1
+	if(F==NULL){
+		cout<<"no se ha abierto el archivo"<endl;
+	}
+	else{
+		fread(&v,size(v),1,F);
+		while(!feof(F)){
+			if(*dp<0){
+				*dp=0
+				p[*dp]=v;
+				*dp=*dp+1
+			}
+			else{
+				if(*dp!=dimension){
+					p[*dp]=v;
+					*dp=*dp+1
+				}
+				else{
+					cout<<"fuera de rango"<<endl;
+				}
+			}
+			fread(&v,size(v),1,F);
+		}
+	}
+}
 void salir() {
     cout << "\n Gracias por usar nuestro sistema. Vuelva pronto.\n";
 }
