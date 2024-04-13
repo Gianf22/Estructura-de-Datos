@@ -13,6 +13,7 @@ int menu();
 void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta);
 void crear(FILE* P);
 void ingresar(FILE* P, Productos& producto);
+void eliminarDatoProd(V_PORDUCTOS *vp);
 void mostrar(FILE* P, Productos& producto);
 void mostrarPorCodigo(FILE* P, int codigo);
 void salir();
@@ -202,4 +203,43 @@ void salir() {
 
 void salir() {
     cout << "\n Gracias por usar nuestro sistema. Vuelva pronto.\n";
+}
+
+void eliminarDatoProd(V_PRODUCTOS *vp)
+{
+    PRODUCTOS aux;
+    int pos, n, i;
+    char confir;
+    n=vp->dx;
+    if (n>0) {
+        if (n<=MAX) {
+            cout<<"Ingrese la posición de la mercancia a eliminar ---> ";
+            cin>> pos;
+            if(pos>=0 && pos<=n) {
+                system("cls");
+		cout<<"Esta seguro de eliminar esta posicion?---s/n\n";
+                fflush(stdin);
+                cin>>confir;
+                if(confir=='s'||confir=='S') {
+                    for (i=(pos-1); i<n; i++) {
+			aux = vp->x[i];
+                        vp->x[i] = vp->x[i+1];
+                        vp->x[i+1] = aux;
+                    }
+                    n=n-1;
+                    vp->dx=n;
+                }
+
+            } else {
+                cout<<"Posición no encontrada\n";
+                system("pause");
+            }
+        } else {
+            cout<<"Dimension fuera de rango\n";
+            system("pause");
+        }
+    } else {
+        cout<<"Registro mercancia vacio\n";
+        system("pause");
+    }
 }
