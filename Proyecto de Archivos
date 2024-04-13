@@ -1,1 +1,171 @@
-//Este es un proyecto de C++
+#include <iostream>
+
+using namespace std;
+
+struct Productos {
+    int codProducto;
+    char nomProducto[30];
+    int cantidad;
+    int preciounitario;
+};
+
+int menu();
+void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta);
+void crear(FILE* P);
+void ingresar(FILE* P, Productos& producto);
+void mostrar(FILE* P, Productos& producto);
+void mostrarPorCodigo(FILE* P, int codigo);
+void salir();
+
+int main() {
+    int opc;
+    char rpta;
+    int codigo;
+    Productos producto;
+    FILE* P;
+	
+	mostrarmenu(opc, P, producto, codigo, rpta);
+    salir();
+}
+
+int menu() {
+    int opcion;
+    cout << " ======================================";
+    cout << "\n          REGISTRO DE PRODUCTOS";
+    cout << "\n ======================================\n";
+    cout << "\n 1. Crear archivo de productos \n";
+    cout << " 2. Ingresar nuevo producto \n";
+    cout << " 3. Mostrar relacion de productos \n";
+    cout << " 4. Mostrar producto por codigo \n";
+    cout << "\n Digite una opcion ==> "; cin >> opcion;
+    return opcion;
+}
+
+void mostrarmenu(int opc, FILE*P, Productos producto, int codigo, char respuesta){
+	do {
+        system("cls");
+        opc = menu();
+		switch (opc) {
+            case 1: crear(P); break;
+            case 2: ingresar(P, producto); break;
+            case 3: mostrar(P, producto); break;
+            case 4: mostrarPorCodigo(P,codigo); break;
+            default:
+            	cout<<"\n Opcion invalida. Digite una opcion disponible.\n";
+		}
+		cout << "\n Desea continuar S/N ==> ";
+        cin >> respuesta;
+        system("cls");
+    } while (respuesta == 'S' || respuesta == 's');
+}
+
+void crear(FILE* P) {
+	system("cls");
+    P = fopen("c:Productos.txt", "w");
+    if (P == NULL)
+        cout << "\n No se puede abrir el archivo Productos \n\n";
+    else {
+        cout << "\n Creacion exitosa del archivo\n";
+        fclose(P);
+    }
+}
+
+void ingresar(FILE* P, Productos& producto) {
+    char temp[2];
+    system("cls");
+    cout << "\n ========================================";
+    cout << "\n       INGRESO DE NUEVO PRODUCTO";
+    cout << "\n ========================================\n";
+    cout << "\n Digite los datos del nuevo producto:\n\n";
+
+    cout << " Codigo de producto: "; cin >> producto.codProducto;
+    cin.ignore(); // Agregado para limpiar el buffer
+    cout << " Nombre del producto: "; cin.getline(producto.nomProducto, sizeof(producto.nomProducto));
+    cout << " Cantidad de unidades: "; cin >> producto.cantidad;
+    cin.ignore(); // Agregado para limpiar el buffer
+    cout << " Precio por unidad: S/. "; cin >> producto.preciounitario;
+
+    P = fopen("c:Productos.txt", "a");
+    if (P != NULL) {
+        fwrite(&producto, sizeof(producto), 1, P);
+        if (!ferror(P))
+            fclose(P);
+        else
+            cout << " Error de escritura en el archivo \n";
+    } else
+        cout << " No se puede abrir el archivo \n";
+}
+
+void mostrar(FILE* P, Productos& producto) {
+    int i;
+	system("cls");
+
+    P = fopen("c:Productos.txt", "r");
+    if (P == NULL) {
+        cout << " No se puede abrir el archivo Productos \n";
+        system("pause");
+    } else {
+    	cout << "\n ========================================";
+    	cout << "\n          PRODUCTOS REGISTRADOS";
+    	cout << "\n ========================================\n";
+
+        while (!feof(P)) {
+            fread(&producto, sizeof(producto), 1, P);
+            if (ferror(P)) {
+                cout << " Error de Lectura de Archivo \n";
+                system("pause");
+            }
+            if (!feof(P)) {
+                cout << "\n Codigo de producto: "; cout << producto.codProducto << "\n";
+                cout << " Nombre del producto: "; cout << producto.nomProducto << "\n";
+                cout << " Cantidad de unidades: "; cout << producto.cantidad << "\n";
+                cout << " Precio por unidad: S/. "; cout << producto.preciounitario << "\n";
+                cout << "\n ======================================== \n";
+            }
+        }
+        fclose(P);
+    }
+}
+
+void mostrarPorCodigo(FILE* P, int codigo) {
+    Productos producto;
+    system("cls");
+    cout<< "\n Ingrese el codigo del producto a mostrar: ";
+    cin>>codigo;
+    
+    P = fopen("c:Productos.txt", "r");
+    if (P == NULL) {
+        cout << " No se puede abrir el archivo Productos \n";
+        system("pause");
+    } else {
+        bool encontrado = false;
+
+        while (!feof(P)) {
+            fread(&producto, sizeof(producto), 1, P);
+            if (ferror(P)) {
+                cout << " Error de Lectura de Archivo \n";
+                system("pause");
+            }
+            if (!feof(P) && producto.codProducto == codigo) {
+                encontrado = true;
+			    cout << "\n ========================================";
+			    cout << "\n           DATOS DEL PRODUCTO";
+			    cout << "\n ========================================\n";
+                cout << "\n Codigo del producto: " << producto.codProducto << "\n";
+                cout << " Nombre del producto: " << producto.nomProducto << "\n";
+                cout << " Cantidad de unidades: " << producto.cantidad << "\n";
+                cout << " Precio por unidad: S/. " << producto.preciounitario << "\n";
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            cout << "\n Producto no encontrado con el codigo " << codigo << "\n";
+        }
+        fclose(P);
+    }
+}
+
+void salir() {
+    cout << "\n Gracias por usar nuestro sistema. Vuelva pronto.\n";
+}
