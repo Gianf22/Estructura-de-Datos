@@ -1,0 +1,29 @@
+
+void recuperarDatos(FILE *F, PRODUCTOS p[], int *dp){
+	producto v;
+	F=fopen("d:inventario.dat","w");
+	*dp=-1
+	if(F==NULL){
+		cout<<"no se ha abierto el archivo"<endl;
+	}
+	else{
+		fread(&v,size(v),1,F);
+		while(!feof(F)){
+			if(*dp<0){
+				*dp=0
+				p[*dp]=v;
+				*dp=*dp+1
+			}
+			else{
+				if(*dp!=dimension){
+					p[*dp]=v;
+					*dp=*dp+1
+				}
+				else{
+					cout<<"fuera de rango"<<endl;
+				}
+			}
+			fread(&v,size(v),1,F);
+		}
+	}
+}
